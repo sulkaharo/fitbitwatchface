@@ -1,0 +1,25 @@
+{
+  "fitbit": {
+    "appUUID": "31393d14-bd3c-460e-8930-2a07ba5c28f2",
+    "appType": "clockface",
+    "appDisplayName": "NSFitbit2",
+    "iconFile": "resources/icon.png",
+    "wipeColor": "#3f51b5",
+    "requestedPermissions": [
+      "access_internet",
+      "run_background",
+      "access_activity",
+      "access_heart_rate",
+      "access_user_profile"
+    ],
+    "buildTargets": [
+      "higgs",
+      "meson"
+    ],
+    "i18n": {
+      "en": {
+        "name": "NSFitbit2"
+      }
+    }
+  }
+}
