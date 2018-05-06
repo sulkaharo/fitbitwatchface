@@ -9,6 +9,8 @@ import { me } from "companion";
 // // default URL pointing at xDrip Plus endpoint
  var URL = null;
 
+let lastKnownRecordDate = 0;
+let lastFetch = 0;
 
 function queryBGD() {
   let url = getSgvURL()
@@ -20,6 +22,10 @@ function queryBGD() {
         let date = new Date();
        
         let currentBgDate = new Date(data[0].dateString);
+        
+        let recordDate = currentBgDate.getTime();
+        
+        if (recordDate > lastKnownRecordDate) {lastKnownRecordDate = recordDate };
 
         /*
         let diffMs =date.getTime() - JSON.stringify(data[0].date) // milliseconds between now & today              
@@ -81,6 +87,17 @@ function returnData(data) {
 }
 
 function formatReturnData() {
+  
+  // Only do a fetch if 5 minutes and 10 seconds has passed
+  // Only do one fetch / 60 seconds after that
+  
+  console.log("Checking if fetch is needed");
+  
+  let dateNow = (new Date()).getTime();
+  if ((dateNow - lastKnownRecordDate) < (5*60*1000 + 10000)) { return; }
+  if ((dateNow - lastFetch) < (2 * 60*1000)) { return; }
+  
+  lastFetch = dateNow;
 
     console.log("Fetching Data...");
   
@@ -135,7 +152,7 @@ messaging.peerSocket.onmessage = function(evt) {
 }
 
 
-setInterval(formatReturnData, 1 * 60 * 1000);
+setInterval(formatReturnData, 15 * 1000);
 
 // Listen for the onerror event
 messaging.peerSocket.onerror = function(err) {
